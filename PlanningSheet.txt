@@ -1,0 +1,9 @@
+﻿
+
+SAVING DATA 
+	// On button click, add the "data" to the database
+	- Put the code inside the button click event functio
+
+LOADING DATA
+	// On program start, retrive the "data" per row and add it back to the listbox
+	- Put the code inside the MainWindow() constuctor

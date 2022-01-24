@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Data;
+using System.Data.SQLite;
+using Dapper;
+using System.Configuration;
+
 
 namespace Tasks
 {
@@ -24,6 +17,7 @@ namespace Tasks
         {
             this.DataContext = this;
             InitializeComponent();
+            
         }
 
         private void Add_Task_Button_Click(object sender, RoutedEventArgs e)
@@ -43,7 +37,24 @@ namespace Tasks
 
                 Task_TextBox.Clear();
                 Description_TextBox.Clear();
+            }
+            List<string> task = new List<string>() { task_text, description_text, due_date };
+;           SaveListBoxItems(task);
+        }
 
+        private static string LoadConnectionString(string id = "Default")
+        {
+            return ConfigurationManager.ConnectionStrings[id].ConnectionString;
+        }
+
+        public static void SaveListBoxItems(List<string> listBoxItems)
+        {
+            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            {
+                connection.Execute(
+                    "insert into Tasks (Task, Description, Due_Date) values (@Task, @Description, @Due_Date)",
+                    listBoxItems
+                    );
             }
         }
 

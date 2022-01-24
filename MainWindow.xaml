@@ -12,7 +12,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox x:Name="Tasks_ListBox" Height="400" Width="220">
+        <ListBox x:Name="Tasks_ListBox" Height="390" Width="220">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="200" Height="15" ToolTip="{Binding Description}">
