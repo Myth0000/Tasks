@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using System.Data;
-using System.Data.SQLite;
-using Dapper;
-using System.Configuration;
+using System.IO;
+using System;
 
 
 namespace Tasks
@@ -13,51 +11,56 @@ namespace Tasks
     /// </summary>
     public partial class MainWindow : Window
     {
+        string ListboxDataPath = @"C:\Users\infin\source\repos\Tasks\ListboxData.txt";
+
         public MainWindow()
         {
             this.DataContext = this;
             InitializeComponent();
             
+            // Load up all the Tasks from the data
+            string[] ListboxData = File.ReadAllLines(ListboxDataPath);
+            foreach(string task in ListboxData)
+            {   
+                string[] task_elements = task.Split("\" \"");
+                
+                AddTaskToListbox(task_elements[0].Remove(0,1), task_elements[1], task_elements[2].Remove(task_elements[2].Length - 1,1));
+            }
+            
+            
         }
-
+        
         private void Add_Task_Button_Click(object sender, RoutedEventArgs e)
         {
             string task_text = Task_TextBox.Text.Trim();
             string description_text = Description_TextBox.Text.Trim();
-            string due_date = Due_Date_DatePicker.SelectedDate.Value.Date.ToShortDateString(); ;
+            string due_date = Due_Date_DatePicker.SelectedDate.HasValue ? Due_Date_DatePicker.SelectedDate.Value.Date.ToShortDateString() : "false"; 
 
-            if (!string.IsNullOrWhiteSpace(task_text) && !string.IsNullOrWhiteSpace(description_text))
+            if (!string.IsNullOrWhiteSpace(task_text) && !string.IsNullOrWhiteSpace(description_text) && due_date != "false")
             {
-                Tasks_ListBox.Items.Add(new NewTask()
-                {
-                    Task = task_text,
-                    Description = description_text,
-                    Due_Date = due_date
-                });
-
+                AddTaskToListbox(task_text, description_text, due_date);
                 Task_TextBox.Clear();
                 Description_TextBox.Clear();
+                Save_Task(ListboxDataPath, task_text, description_text, due_date);
             }
-            List<string> task = new List<string>() { task_text, description_text, due_date };
-;           SaveListBoxItems(task);
         }
 
-        private static string LoadConnectionString(string id = "Default")
+        void AddTaskToListbox(string task, string description, string due_date)
         {
-            return ConfigurationManager.ConnectionStrings[id].ConnectionString;
-        }
-
-        public static void SaveListBoxItems(List<string> listBoxItems)
-        {
-            using (IDbConnection connection = new SQLiteConnection(LoadConnectionString()))
+            Tasks_ListBox.Items.Add(new NewTask()
             {
-                connection.Execute(
-                    "insert into Tasks (Task, Description, Due_Date) values (@Task, @Description, @Due_Date)",
-                    listBoxItems
-                    );
-            }
+                Task = task,
+                Description = description,
+                Due_Date = due_date
+            });
         }
 
+        private void Save_Task(string path, string task, string description, string due_date)
+        {
+            using StreamWriter file = new(path, append: true);
+            file.WriteLine($"\"{task}\" \"{description}\" \"{due_date}\"");
+        }
+        
     }
     public class NewTask
     {
