@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System;
 using System.Windows.Controls;
-
+using System.Windows.Media;
+using System.Threading;
 
 namespace Tasks
 {
@@ -27,25 +28,42 @@ namespace Tasks
                 string[] task_elements = task.Split("\" \"");
                 
                 AddTaskToListbox(task_elements[0].Remove(0,1), task_elements[1], task_elements[2].Remove(task_elements[2].Length - 1,1));
-            }
-            
-            
+            }        
         }
         
         private void Add_Task_Button_Click(object sender, RoutedEventArgs e)
         {
             string task_text = Task_TextBox.Text.Trim();
             string description_text = Description_TextBox.Text.Trim();
-            string due_date = Due_Date_DatePicker.SelectedDate.HasValue ? Due_Date_DatePicker.SelectedDate.Value.Date.ToShortDateString() : "false"; 
+            string due_date = Due_Date_DatePicker.SelectedDate.HasValue ? Due_Date_DatePicker.SelectedDate.Value.Date.ToShortDateString() : "false";
 
-            if (!string.IsNullOrWhiteSpace(task_text) && !string.IsNullOrWhiteSpace(description_text) && due_date != "false")
+            if (!IsNullOrWhiteSpace(task_text) && !IsNullOrWhiteSpace(description_text) && due_date != "false")
             {
+   
+                if (StackPanel.Children[0] is TextBlock textBlock && textBlock.Name == "ErrorMessage_TextBlock")
+                { StackPanel.Children.RemoveAt(0); }
+
+                if (ContainsQuotes(task_text) || ContainsQuotes(description_text))
+                {
+                    TextBlock ErrorMessage = new TextBlock();
+                    ErrorMessage.Name = "ErrorMessage_TextBlock";
+                    ErrorMessage.Text = "Please do not use double quotes.";
+                    ErrorMessage.Foreground = Brushes.Red;
+                    ErrorMessage.Margin = new Thickness(25, 0, 0, 0);
+                    StackPanel.Children.Insert(0, ErrorMessage);
+                    return;
+                }
+                
                 AddTaskToListbox(task_text, description_text, due_date);
                 Task_TextBox.Clear();
                 Description_TextBox.Clear();
                 Save_Task(ListboxDataPath, task_text, description_text, due_date);
             }
         }
+
+        bool ContainsQuotes(string _string) { return _string.Contains("\""); }
+
+        bool IsNullOrWhiteSpace(string _string) { return string.IsNullOrWhiteSpace(_string); }
 
         void AddTaskToListbox(string task, string description, string due_date)
         {
@@ -71,7 +89,6 @@ namespace Tasks
 
             List<string> ListboxData = File.ReadAllLines(ListboxDataPath).ToList();
             ListboxData.RemoveAt(SelectedIndex);
-            //StreamWriter ListboxDataFile = new(ListboxDataPath, append: true);
             File.WriteAllLines(ListboxDataPath, ListboxData);
         }
     

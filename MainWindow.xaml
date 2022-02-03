@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tasks"
         mc:Ignorable="d"
-        Title="Tasks" Height="450" Width="500">
+        Title="Tasks" Height="450" Width="500" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -38,7 +38,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Grid.Column="1" Height="310">
+        <StackPanel x:Name="StackPanel" Grid.Column="1" Height="325">
             <TextBlock Margin="25,0,0,0" FontSize="20">Task</TextBlock>
             <TextBox x:Name="Task_TextBox" TextWrapping="Wrap" Height="50" Width="200"/>
             <TextBlock Margin="25,10,0,0" FontSize="20">Description</TextBlock>
