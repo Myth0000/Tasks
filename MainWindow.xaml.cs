@@ -20,17 +20,17 @@ namespace Tasks
         {
             this.DataContext = this;
             InitializeComponent();
-            
+
             // Load up all the Tasks from the data
             string[] ListboxData = File.ReadAllLines(ListboxDataPath);
-            foreach(string task in ListboxData)
-            {   
+            foreach (string task in ListboxData)
+            {
                 string[] task_elements = task.Split("\" \"");
-                
-                AddTaskToListbox(task_elements[0].Remove(0,1), task_elements[1], task_elements[2].Remove(task_elements[2].Length - 1,1));
-            }        
+
+                AddTaskToListbox(task_elements[0].Remove(0, 1), task_elements[1], task_elements[2].Remove(task_elements[2].Length - 1, 1));
+            }
         }
-        
+
         private void Add_Task_Button_Click(object sender, RoutedEventArgs e)
         {
             string task_text = Task_TextBox.Text.Trim();
@@ -39,7 +39,7 @@ namespace Tasks
 
             if (!IsNullOrWhiteSpace(task_text) && !IsNullOrWhiteSpace(description_text) && due_date != "false")
             {
-   
+
                 if (StackPanel.Children[0] is TextBlock textBlock && textBlock.Name == "ErrorMessage_TextBlock")
                 { StackPanel.Children.RemoveAt(0); }
 
@@ -53,7 +53,7 @@ namespace Tasks
                     StackPanel.Children.Insert(0, ErrorMessage);
                     return;
                 }
-                
+
                 AddTaskToListbox(task_text, description_text, due_date);
                 Task_TextBox.Clear();
                 Description_TextBox.Clear();
@@ -91,7 +91,7 @@ namespace Tasks
             ListboxData.RemoveAt(SelectedIndex);
             File.WriteAllLines(ListboxDataPath, ListboxData);
         }
-    
+
     }
     public class NewTask
     {
