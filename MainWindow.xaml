@@ -22,6 +22,16 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Task}"/>
                         <TextBlock Text="{Binding Due_Date}" Grid.Column="1"/>
+
+                        <Grid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Remove" Click="MenuItem_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="C:\Users\infin\source\repos\Tasks\icons"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Grid.ContextMenu>
                     </Grid>
 
                 </DataTemplate>

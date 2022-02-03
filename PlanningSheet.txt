@@ -1,1 +1,5 @@
 ﻿Nothing to see here ^_^
+**IF THE PROGRAM IS NOT STARTING THEN MAKE SURE THERE IS NO EMPTY LINE IN THE "ListboxData.txt" BESIDES THE VERY LAST EMPTY LINE
+**Remove deleted tasks from the data
+
+**Make the file paths relative...

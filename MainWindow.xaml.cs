@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.IO;
+using System.Linq;
 using System;
+using System.Windows.Controls;
 
 
 namespace Tasks
@@ -60,7 +62,19 @@ namespace Tasks
             using StreamWriter file = new(path, append: true);
             file.WriteLine($"\"{task}\" \"{description}\" \"{due_date}\"");
         }
-        
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var SelectedIndex = Tasks_ListBox.SelectedIndex;
+            if (Tasks_ListBox.SelectedIndex == -1) return;
+            Tasks_ListBox.Items.RemoveAt(SelectedIndex);
+
+            List<string> ListboxData = File.ReadAllLines(ListboxDataPath).ToList();
+            ListboxData.RemoveAt(SelectedIndex);
+            //StreamWriter ListboxDataFile = new(ListboxDataPath, append: true);
+            File.WriteAllLines(ListboxDataPath, ListboxData);
+        }
+    
     }
     public class NewTask
     {
