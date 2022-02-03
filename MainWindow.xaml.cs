@@ -71,7 +71,6 @@ namespace Tasks
 
             List<string> ListboxData = File.ReadAllLines(ListboxDataPath).ToList();
             ListboxData.RemoveAt(SelectedIndex);
-            //StreamWriter ListboxDataFile = new(ListboxDataPath, append: true);
             File.WriteAllLines(ListboxDataPath, ListboxData);
         }
     
