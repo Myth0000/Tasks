@@ -11,8 +11,21 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <ListBox x:Name="Tasks_ListBox" Height="390" Width="220">
+        <StackPanel HorizontalAlignment="Left" Margin="11,0,0,0" Height="20" Orientation="Horizontal">
+            <Button Click="ToggleTasksAndArchivedTasks_Button" Width="70" >Toggle Tasks</Button>
+            
+            <Border BorderBrush="DimGray" BorderThickness="1" Margin="11,0,0,0" Background="DimGray">
+                <TextBlock x:Name="ToggleTasksAndArchivedTasksInfo"
+                       VerticalAlignment="Center" HorizontalAlignment="Center" Text="Tasks"/>
+            </Border>
+        </StackPanel>
+        
+        <ListBox x:Name="Tasks_ListBox" Height="363" Width="220" Grid.Row="1" Margin="0,0,0,25" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="200" Height="15" ToolTip="{Binding Description}">
@@ -25,9 +38,14 @@
 
                         <Grid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Remove" Click="MenuItem_Click">
+                                <MenuItem Header="Complete" Click="CompleteItem_Click">
                                     <MenuItem.Icon>
-                                        <Image Source="C:\Users\infin\source\repos\Tasks\icons"/>
+                                        <Image Source="C:\Users\infin\source\repos\Tasks\icons\green_check_icon.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Delete" Click="TasksDeleteItem_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="C:\Users\infin\source\repos\Tasks\icons\red_x_icon.png"/>
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>
@@ -38,7 +56,33 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel x:Name="StackPanel" Grid.Column="1" Height="325">
+        <ListBox x:Name="ArchivedTasks_ListBox" Height="363" Width="220" Grid.Row="1" Margin="0,0,0,25" Visibility="Collapsed">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="200" Height="15" ToolTip="{Binding Description}" Background="LightGreen">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Task}"/>
+                        <TextBlock Text="{Binding Due_Date}" Grid.Column="1"/>
+
+                        <Grid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Click="ArchivedTasksDeleteItem_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="C:\Users\infin\source\repos\Tasks\icons\red_x_icon.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Grid.ContextMenu>
+                    </Grid>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel x:Name="TaskInfoStackPanel" Grid.Column="1" Grid.RowSpan="2" Height="325">
             <TextBlock Margin="25,0,0,0" FontSize="20">Task</TextBlock>
             <TextBox x:Name="Task_TextBox" TextWrapping="Wrap" Height="50" Width="200"/>
             <TextBlock Margin="25,10,0,0" FontSize="20">Description</TextBlock>
